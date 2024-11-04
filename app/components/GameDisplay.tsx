@@ -59,13 +59,6 @@ export default function GameDisplay({
     }
   }
 
-  const gameHasStarted = () => {
-    return (
-      currentPlayer.id === 1 &&
-      players.every((player) => player.scores.length < 1)
-    )
-  }
-
   const endTurn = () => {
     controller.addScore(currentScore, currentPlayer.id)
     setCurrentPlayer(nextPlayer())
@@ -73,7 +66,7 @@ export default function GameDisplay({
   }
 
   const undoLastTurn = () => {
-    if (gameHasStarted()) {
+    if (game.initiated) {
       const prevPlayer = previousPlayer()
       controller.removeLastScore(prevPlayer.id)
       const playerWithRemovedScore = players.find(
@@ -86,7 +79,6 @@ export default function GameDisplay({
   }
 
   const restartGame = () => {
-    // controller.restartGame()
     setRestartModalVisible(true)
   }
 
@@ -122,7 +114,6 @@ export default function GameDisplay({
             <TouchableOpacity
               style={styles.gameControlsBtn}
               onPress={undoLastTurn}
-              disabled={gameHasStarted()}
             >
               <Text style={styles.btnText}>Undo Last Turn</Text>
             </TouchableOpacity>
